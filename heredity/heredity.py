@@ -143,7 +143,6 @@ def joint_probability(people, one_gene, two_genes, have_trait):
     probability = 1
 
     for person in people:
-        # Determine number of genes
         if person in two_genes:
             genes = 2
         elif person in one_gene:
