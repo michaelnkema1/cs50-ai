@@ -83,10 +83,29 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+    
+    pagerank = {page: 0 for page in corpus}
+    pages = list(corpus.keys())
+
+    current_page = random.choice(pages)
+    pagerank[current_page] += 1
+
+    for _ in range(1, n):
+        distribution = transition_model(corpus, current_page, damping_factor)
+        current_page = random.choices(
+            population=list(distribution.keys()),
+            weights=list(distribution.values()),
+            k=1
+        )[0]
+        pagerank[current_page] += 1
+
+    for page in pagerank:
+        pagerank[page] /= n
+
+    return pagerank
 
 
-def iterate_pagerank(corpus, damping_factor):
+def iterate_pagerank(corpus, damping_factor, tolerance=0.001):
     """
     Return PageRank values for each page by iteratively updating
     PageRank values until convergence.
@@ -95,7 +114,27 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+    n = len(corpus)
+    pagerank = {page: 1 / n for page in corpus}
+
+    no_links = {page for page in corpus if len(corpus[page]) == 0}
+    for page in no_links:
+        corpus[page] = set(corpus.keys())
+
+    while True:
+        new_pagerank = {}
+        for page in corpus:
+            total = 0
+            for possible_page in corpus:
+                if page in corpus[possible_page]:
+                    total += pagerank[possible_page] / len(corpus[possible_page])
+            new_pagerank[page] = (1 - damping_factor) / n + damping_factor * total
+
+        if all(abs(new_pagerank[p] - pagerank[p]) < tolerance for p in pagerank):
+            break
+        pagerank = new_pagerank.copy()
+
+    return pagerank
 
 
 if __name__ == "__main__":
