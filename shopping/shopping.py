@@ -63,6 +63,11 @@ def load_data(filename):
     evidence = []
     labels = []
 
+    MONTHS = {
+    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'June': 5,
+    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+    }
+
     with open(filename, mode='r') as f:
         reader = csv.DictReader(f)
 
@@ -80,7 +85,7 @@ def load_data(filename):
                 float(row["ExitRates"]),
                 float(row["PageValues"]),
                 float(row["SpecialDay"]),
-                float(row["Month"]),
+                MONTHS[row["Month"]],
                 int(row["OperatingSystems"]),
                 int(row["Browser"]),
                 int(row["Region"]),
@@ -103,7 +108,7 @@ def train_model(evidence, labels):
     Given a list of evidence lists and a list of labels, return a
     fitted k-nearest neighbor model (k=1) trained on the data.
     """
-    model = KNeighborsClassifier(n_neighbors=1)
+    model = KNeighborsClassifier(n_neighbors=5)
     model.fit(evidence, labels)
     return model
 
