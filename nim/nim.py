@@ -3,8 +3,7 @@ import random
 import time
 
 
-class Nim():
-
+class Nim:
     def __init__(self, initial=[1, 3, 5, 7]):
         """
         Initialize game board.
@@ -70,8 +69,7 @@ class Nim():
             self.winner = self.player
 
 
-class NimAI():
-
+class NimAI:
     def __init__(self, alpha=0.5, epsilon=0.1):
         """
         Initialize AI with an empty Q-learning dictionary,
@@ -103,7 +101,6 @@ class NimAI():
         """
         state_key = tuple(state)
         return self.q.get((state_key, action), 0)
-
 
     def update_q_value(self, state, action, old_q, reward, future_rewards):
         """
@@ -141,13 +138,13 @@ class NimAI():
         if not actions:
             return 0
 
-        max_q = float('-inf')
+        max_q = float("-inf")
         for action in actions:
             q = self.get_q_value(state, action)
             if q > max_q:
                 max_q = q
 
-        return max_q if max_q != float('-inf') else 0
+        return max_q if max_q != float("-inf") else 0
 
     def choose_action(self, state, epsilon=True):
         """
@@ -172,7 +169,7 @@ class NimAI():
         if epsilon and random.random() < self.epsilon:
             return random.choice(actions)
 
-        best_q = float('-inf')
+        best_q = float("-inf")
         best_actions = []
 
         for action in actions:
@@ -200,14 +197,10 @@ def train(n):
         game = Nim()
 
         # Keep track of last move made by either player
-        last = {
-            0: {"state": None, "action": None},
-            1: {"state": None, "action": None}
-        }
+        last = {0: {"state": None, "action": None}, 1: {"state": None, "action": None}}
 
         # Game loop
         while True:
-
             # Keep track of current state and action
             state = game.piles.copy()
             action = player.choose_action(game.piles)
@@ -227,7 +220,7 @@ def train(n):
                     last[game.player]["state"],
                     last[game.player]["action"],
                     new_state,
-                    1
+                    1,
                 )
                 break
 
@@ -237,7 +230,7 @@ def train(n):
                     last[game.player]["state"],
                     last[game.player]["action"],
                     new_state,
-                    0
+                    0,
                 )
 
     print("Done training")
@@ -262,7 +255,6 @@ def play(ai, human_player=None):
 
     # Game loop
     while True:
-
         # Print contents of piles
         print()
         print("Piles:")
