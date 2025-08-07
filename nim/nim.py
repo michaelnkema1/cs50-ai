@@ -176,7 +176,7 @@ class NimAI():
         best_actions = []
 
         for action in actions:
-            q = self.get_g_value(state, action)
+            q = self.get_q_value(state, action)
             if q > best_q:
                 best_q = q
                 best_actions = [action]
